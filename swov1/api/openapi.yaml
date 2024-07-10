@@ -1,0 +1,1981 @@
+openapi: 3.0.1
+info:
+  contact: {}
+  description: "[Rest API Documentation](https://documentation.solarwinds.com/en/success_center/observability/content/api/api-swagger.htm)"
+  license: {}
+  title: SolarWinds Observability REST API
+  version: "1.0"
+servers:
+- description: ""
+  url: https://api.na-01.cloud.solarwinds.com/v1
+security:
+- Full Access API Token: []
+paths:
+  /changeevents:
+    post:
+      operationId: createEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeEvent'
+        description: A JSON object containing a change event
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: 0
+          description: A JSON object containing the id of the created event
+      summary: Create an event
+      tags:
+      - changeevents
+  /entities:
+    get:
+      operationId: getEntities
+      parameters:
+      - description: The entities type
+        explode: true
+        in: query
+        name: type
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: The entities name
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      - description: Number of entities in a response page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 50
+          format: int32
+          type: integer
+        style: form
+      - description: For opaque pagination
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                entities:
+                - id: e-1489588417967403008
+                  type: Website
+                  name: test-site-new5
+                - id: e-1491513720093536256
+                  type: Website
+                  name: MichalTest91
+                pageInfo:
+                  nextPage: /v1/entities?type=Website&name=&pageSize=2&after=ZS0xNDkxNTEzNzIwMDkzNTM2MjU2
+          description: A JSON object containing an array of entities
+      summary: Get entities by type
+      tags:
+      - entities
+  /entities/{id}:
+    get:
+      operationId: getEntityById
+      parameters:
+      - description: The entities ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: e-1489588417967403008
+                type: Website
+                name: test-site-new5
+          description: A JSON object containing a single entity
+      summary: Get entity by id
+      tags:
+      - entities
+  /logs/archives:
+    get:
+      description: Retrieve data on logs archived between a start and end time
+      operationId: getLogArchives
+      parameters:
+      - description: "Time must be within 1 year from the current date. <br><br> ISO\
+          \ 8601 standard <br> Format: <i>yyyy-MM-ddTHH:mm:ssZ</i>"
+        example: 2024-01-23T00:00:00Z
+        explode: true
+        in: query
+        name: startTime
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "Time must be within 1 year from the current date. <br><br> ISO\
+          \ 8601 standard <br> Format: <i>yyyy-MM-ddTHH:mm:ssZ</i>"
+        example: 2024-01-23T10:30:00Z
+        explode: true
+        in: query
+        name: endTime
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: Maximum number of records to be fetched per request
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 1000
+          format: int32
+          type: integer
+        style: form
+      - description: For opaque pagination
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogArchiveResponse'
+          description: OK
+      summary: Retrieve data on archived logs
+      tags:
+      - logs/archives
+  /metrics:
+    get:
+      description: List metrics seen within a time period
+      operationId: listMetrics
+      parameters:
+      - description: metric name
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of metrics in a response page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+        style: form
+      - description: "For opaque pagination, with default value : empty string"
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMetricsResponse'
+          description: OK
+      summary: List metrics
+      tags:
+      - metrics
+  /metrics/{name}:
+    get:
+      description: Get info about a metric
+      operationId: getMetric
+      parameters:
+      - description: metric name
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMetricResponse'
+          description: OK
+      summary: Get metric info
+      tags:
+      - metrics
+  /metrics/{name}/measurements:
+    get:
+      description: "List metric measurement values, grouped by attributes, filtered\
+        \ by the filter"
+      operationId: listMetricMeasurements
+      parameters:
+      - description: metric name
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "Query to filter the measurement values. e.g  id:[id1,id2] category:moderate"
+        explode: true
+        in: query
+        name: filter
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "CSV string of attribute names to group measurements by. e.g\
+          \ id,category"
+        explode: true
+        in: query
+        name: groupBy
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "One of COUNT, MIN, MAX, AVG, SUM, or LAST"
+        explode: true
+        in: query
+        name: aggregateBy
+        required: false
+        schema:
+          default: AVG
+          type: string
+        style: form
+      - description: Resolution size of an aggregation bucket in seconds
+        explode: true
+        in: query
+        name: bucketSizeInSeconds
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: |-
+          Secondary grouping to allow aggregating data points inside individual buckets.
+             Has to be set together with `preGroupByMethod`
+        explode: true
+        in: query
+        name: preGroupBy
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |-
+          Secondary aggregation to allow aggregating data points inside individual buckets.
+             Has to be set together with `preGroupBy`
+        explode: true
+        in: query
+        name: preGroupByMethod
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of groupings in a response page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+        style: form
+      - description: "For opaque pagination, with default value : empty string"
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMetricMeasurementsResponse'
+          description: OK
+      summary: List metric's measurement values for a metric
+      tags:
+      - metrics
+  /metrics/{name}/attributes:
+    get:
+      description: List all attribute names defined for the given metric
+      operationId: listMetricAttributeNames
+      parameters:
+      - description: metric name
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of attribute names in a response page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+        style: form
+      - description: "For opaque pagination, with default value : empty string"
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMetricAttributeNamesResponse'
+          description: OK
+      summary: List metric attribute names
+      tags:
+      - metrics
+  /metrics/{name}/attributes/{attributeName}:
+    get:
+      description: List values of a metric's attribute
+      operationId: listMetricAttributeValues
+      parameters:
+      - description: metric name
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: attribute name
+        explode: false
+        in: path
+        name: attributeName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of attribute values in a response page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+        style: form
+      - description: "For opaque pagination, with default value : empty string"
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMetricAttributeValuesResponse'
+          description: OK
+      summary: List metric attribute values
+      tags:
+      - metrics
+  /metadata/entities/types:
+    get:
+      description: List all available entity types.
+      operationId: listEntityTypes
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEntityTypesResponse'
+          description: OK
+      summary: List all entity types
+      tags:
+      - metadata
+  /metadata/entities/types/{type}/metrics:
+    get:
+      description: "List metrics metadata for an entity type between a start and end\
+        \ time. If start time and end time unspecified, default will be applied."
+      operationId: listMetricsForEntityType
+      parameters:
+      - description: entity type
+        explode: false
+        in: path
+        name: type
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMetricsForEntityTypeResponse'
+          description: OK
+      summary: List metrics metadata for an entity type
+      tags:
+      - metadata
+  /logs:
+    get:
+      description: Search logs within a time period
+      operationId: logs
+      parameters:
+      - description: A search query string.
+        explode: true
+        in: query
+        name: filter
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Search a specific group
+        explode: true
+        in: query
+        name: group
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: startTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: yyyy-MM-ddTHH:mm:ssZ
+        explode: true
+        in: query
+        name: endTime
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Search direction: backward, forward, or tail"
+        explode: true
+        in: query
+        name: direction
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of logs in a response page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 10000
+          format: int32
+          type: integer
+        style: form
+      - description: "For opaque pagination, with default value : empty string"
+        explode: true
+        in: query
+        name: skipToken
+        required: false
+        schema:
+          default: ""
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsResponse'
+          description: OK
+      summary: Search logs
+      tags:
+      - logs
+  /entities/websites:
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/WebsiteBody'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityIdSchema'
+          description: CREATED
+        "4XX":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ERROR
+      summary: Create website
+      tags:
+      - entities/websites
+  /entities/websites/{entityId}:
+    delete:
+      parameters:
+      - example: e-1448474379026206720
+        explode: false
+        in: path
+        name: entityId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityIdSchema'
+          description: DELETED
+        "4XX":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ERROR
+      summary: Delete website
+      tags:
+      - entities/websites
+    get:
+      parameters:
+      - example: e-1448474379026206720
+        explode: false
+        in: path
+        name: entityId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_entities_websites__entityId__get_200_response'
+          description: A JSON object containing Website configuration
+        "4XX":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ERROR
+      summary: Get website
+      tags:
+      - entities/websites
+    put:
+      parameters:
+      - example: e-1448474379026206720
+        explode: false
+        in: path
+        name: entityId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/WebsiteBody'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityIdSchema'
+          description: UPDATED
+        "4XX":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ERROR
+      summary: Update website
+      tags:
+      - entities/websites
+components:
+  parameters:
+    EntityId:
+      example: e-1448474379026206720
+      explode: false
+      in: path
+      name: entityId
+      required: true
+      schema:
+        type: string
+      style: simple
+    TestResultTime:
+      example: 2023-12-13T12:33:12Z
+      explode: true
+      in: query
+      name: testResultTime
+      required: true
+      schema:
+        format: date-time
+        type: string
+      style: form
+    AnalysisId:
+      example: e-1615727468467286016-HTTPS-region:NA-1702983385-analysis
+      explode: true
+      in: query
+      name: analysisId
+      required: true
+      schema:
+        type: string
+      style: form
+    ValidationId:
+      example: e-1615727468467286016-HTTPS-region:NA-1702984150-validations
+      explode: true
+      in: query
+      name: validationId
+      required: true
+      schema:
+        type: string
+      style: form
+  requestBodies:
+    WebsiteBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WebsiteSchema'
+      description: A JSON object containing Website configuration
+      required: true
+  responses:
+    EntityCreated:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntityIdSchema'
+      description: CREATED
+    EntityUpdated:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntityIdSchema'
+      description: UPDATED
+    EntityDeleted:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntityIdSchema'
+      description: DELETED
+    Error:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: ERROR
+    WebsiteResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/_entities_websites__entityId__get_200_response'
+      description: A JSON object containing Website configuration
+    ScheduleOnDemandCheckResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OnDemandCheckSchema'
+      description: ATTEMPT TO SCHEDULE
+  schemas:
+    ChangeEvent:
+      example:
+        name: name
+        description: description
+        links:
+        - rel: rel
+          href: href
+          label: label
+        - rel: rel
+          href: href
+          label: label
+        id: 0
+        source: source
+        parentEventId: 1
+        title: title
+        timestamp: 6
+        tags:
+          key: tags
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          maxLength: 100
+          minLength: 1
+          type: string
+        title:
+          maxLength: 250
+          minLength: 1
+          type: string
+        timestamp:
+          format: int64
+          type: integer
+        source:
+          type: string
+        description:
+          type: string
+        parentEventId:
+          format: int64
+          type: integer
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+        links:
+          items:
+            $ref: '#/components/schemas/Link'
+          type: array
+      required:
+      - name
+      - title
+      type: object
+    Link:
+      example:
+        rel: rel
+        href: href
+        label: label
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
+        label:
+          type: string
+      required:
+      - href
+      - rel
+      type: object
+    Jwt:
+      properties:
+        scopes:
+          items:
+            type: string
+          type: array
+      required:
+      - scopes
+      type: object
+    LogArchiveModel:
+      description: List of archived logs data
+      example:
+        name: 2024-01-23-08.json.gz
+        downloadUrl: https://ssp-log-archives.s3.amazonaws.com/logs/138723/dt%3D2024-01-23/2024-01-23-08.json.gz?X-Amz-Security-Token=IQ...
+        id: logs/138723/dt=2024-01-23/2024-01-23-08.json.gz
+        archiveSize: 817226354
+        archivedTimestamp: "1706020985"
+      properties:
+        id:
+          description: ID of the file
+          example: logs/138723/dt=2024-01-23/2024-01-23-08.json.gz
+          type: string
+        name:
+          description: Name of the file
+          example: 2024-01-23-08.json.gz
+          type: string
+        downloadUrl:
+          description: URL location of the file
+          example: https://ssp-log-archives.s3.amazonaws.com/logs/138723/dt%3D2024-01-23/2024-01-23-08.json.gz?X-Amz-Security-Token=IQ...
+          type: string
+        archivedTimestamp:
+          description: Epoc timestamp (in seconds) of archival
+          example: "1706020985"
+          type: string
+        archiveSize:
+          description: Size of file in bytes
+          example: 817226354
+          format: double
+          type: number
+      required:
+      - archiveSize
+      - archivedTimestamp
+      - downloadUrl
+      - id
+      - name
+      type: object
+    LogArchiveResponse:
+      example:
+        pageInfo:
+          nextPage: https://api.na-01.cloud.solarwinds.com/v1/logs/archives?startTime=...
+        logArchives:
+        - name: 2024-01-23-08.json.gz
+          downloadUrl: https://ssp-log-archives.s3.amazonaws.com/logs/138723/dt%3D2024-01-23/2024-01-23-08.json.gz?X-Amz-Security-Token=IQ...
+          id: logs/138723/dt=2024-01-23/2024-01-23-08.json.gz
+          archiveSize: 817226354
+          archivedTimestamp: "1706020985"
+        - name: 2024-01-23-08.json.gz
+          downloadUrl: https://ssp-log-archives.s3.amazonaws.com/logs/138723/dt%3D2024-01-23/2024-01-23-08.json.gz?X-Amz-Security-Token=IQ...
+          id: logs/138723/dt=2024-01-23/2024-01-23-08.json.gz
+          archiveSize: 817226354
+          archivedTimestamp: "1706020985"
+      properties:
+        logArchives:
+          description: List of archived logs data
+          items:
+            $ref: '#/components/schemas/LogArchiveModel'
+          type: array
+        pageInfo:
+          $ref: '#/components/schemas/PageInfoModel'
+      required:
+      - logArchives
+      - pageInfo
+      type: object
+    PageInfoModel:
+      description: Pagination
+      example:
+        nextPage: https://api.na-01.cloud.solarwinds.com/v1/logs/archives?startTime=...
+      properties:
+        nextPage:
+          example: https://api.na-01.cloud.solarwinds.com/v1/logs/archives?startTime=...
+          type: string
+      type: object
+    GetMetricResponse:
+      example:
+        lastReportedTime: lastReportedTime
+        name: name
+        formula: formula
+        units: units
+      properties:
+        name:
+          type: string
+        units:
+          type: string
+        formula:
+          type: string
+        lastReportedTime:
+          type: string
+      required:
+      - name
+      type: object
+    ListMetricsResponse:
+      example:
+        metricsInfo:
+        - lastReportedTime: lastReportedTime
+          name: name
+          formula: formula
+          units: units
+        - lastReportedTime: lastReportedTime
+          name: name
+          formula: formula
+          units: units
+        pageInfo:
+          nextPage: https://openapi-generator.tech
+          prevPage: https://openapi-generator.tech
+      properties:
+        metricsInfo:
+          items:
+            $ref: '#/components/schemas/GetMetricResponse'
+          type: array
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+      required:
+      - metricsInfo
+      type: object
+    PageInfo:
+      example:
+        nextPage: https://openapi-generator.tech
+        prevPage: https://openapi-generator.tech
+      properties:
+        prevPage:
+          format: uri
+          type: string
+        nextPage:
+          format: uri
+          type: string
+      type: object
+    Attribute:
+      example:
+        value: value
+        key: key
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required:
+      - key
+      - value
+      type: object
+    ListMetricMeasurementsResponse:
+      example:
+        groupings:
+        - attributes:
+          - value: value
+            key: key
+          - value: value
+            key: key
+          measurements:
+          - time: time
+            value: 0.8008281904610115
+          - time: time
+            value: 0.8008281904610115
+        - attributes:
+          - value: value
+            key: key
+          - value: value
+            key: key
+          measurements:
+          - time: time
+            value: 0.8008281904610115
+          - time: time
+            value: 0.8008281904610115
+        bucketSizeInSeconds: 6
+        pageInfo:
+          nextPage: https://openapi-generator.tech
+          prevPage: https://openapi-generator.tech
+      properties:
+        groupings:
+          items:
+            $ref: '#/components/schemas/MeasurementGrouping'
+          type: array
+        bucketSizeInSeconds:
+          format: int32
+          type: integer
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+      required:
+      - bucketSizeInSeconds
+      - groupings
+      type: object
+    Measurement:
+      example:
+        time: time
+        value: 0.8008281904610115
+      properties:
+        time:
+          type: string
+        value:
+          format: double
+          type: number
+      type: object
+    MeasurementGrouping:
+      example:
+        attributes:
+        - value: value
+          key: key
+        - value: value
+          key: key
+        measurements:
+        - time: time
+          value: 0.8008281904610115
+        - time: time
+          value: 0.8008281904610115
+      properties:
+        attributes:
+          items:
+            $ref: '#/components/schemas/Attribute'
+          type: array
+        measurements:
+          items:
+            $ref: '#/components/schemas/Measurement'
+          type: array
+      required:
+      - measurements
+      type: object
+    ListMetricAttributeNamesResponse:
+      example:
+        names:
+        - names
+        - names
+        pageInfo:
+          nextPage: https://openapi-generator.tech
+          prevPage: https://openapi-generator.tech
+      properties:
+        names:
+          items:
+            type: string
+          type: array
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+      required:
+      - names
+      type: object
+    ListMetricAttributeValuesResponse:
+      example:
+        values:
+        - values
+        - values
+        name: name
+        pageInfo:
+          nextPage: https://openapi-generator.tech
+          prevPage: https://openapi-generator.tech
+      properties:
+        name:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+      required:
+      - name
+      - values
+      type: object
+    ListEntityTypesResponse:
+      example:
+        types:
+        - Service
+        - ServiceInstance
+        - KubernetesCluster
+      properties:
+        types:
+          description: Array of entity types
+          example:
+          - Service
+          - ServiceInstance
+          - KubernetesCluster
+          items:
+            description: Array of entity types
+            example: "[\"Service\",\"ServiceInstance\",\"KubernetesCluster\"]"
+            type: string
+          type: array
+      required:
+      - types
+      type: object
+    ListMetricsForEntityTypeResponse:
+      example:
+        metrics:
+        - lastReportedTime: lastReportedTime
+          name: name
+          formula: formula
+          units: units
+        - lastReportedTime: lastReportedTime
+          name: name
+          formula: formula
+          units: units
+        type: type
+      properties:
+        type:
+          type: string
+        metrics:
+          items:
+            $ref: '#/components/schemas/GetMetricResponse'
+          type: array
+      required:
+      - metrics
+      - type
+      type: object
+    LogsResponse:
+      example:
+        pageInfo:
+          nextPage: https://openapi-generator.tech
+          prevPage: https://openapi-generator.tech
+        logs:
+        - severity: severity
+          hostname: hostname
+          id: id
+          time: time
+          program: program
+          message: message
+        - severity: severity
+          hostname: hostname
+          id: id
+          time: time
+          program: program
+          message: message
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/RestLogEvent'
+          type: array
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+      required:
+      - logs
+      type: object
+    RestLogEvent:
+      example:
+        severity: severity
+        hostname: hostname
+        id: id
+        time: time
+        program: program
+        message: message
+      properties:
+        id:
+          type: string
+        time:
+          type: string
+        message:
+          type: string
+        hostname:
+          type: string
+        severity:
+          type: string
+        program:
+          type: string
+      required:
+      - hostname
+      - id
+      - message
+      - program
+      - severity
+      - time
+      type: object
+    EntityIdSchema:
+      example:
+        id: e-1448474379026206720
+      properties:
+        id:
+          example: e-1448474379026206720
+          type: string
+      required:
+      - id
+      type: object
+    EntityBase:
+      allOf:
+      - $ref: '#/components/schemas/EntityIdSchema'
+      - properties:
+          type:
+            example: Website
+            type: string
+        required:
+        - type
+        type: object
+    WebsiteProtocol:
+      description: Protocol to perform availability checks for.
+      enum:
+      - HTTP
+      - HTTPS
+      type: string
+    ProbeLocationType:
+      description: Specificity for location of synthetic probes to be used for availability
+        tests.
+      enum:
+      - REGION
+      - COUNTRY
+      - CITY
+      type: string
+    ProbePlatform:
+      description: Cloud platforms hosting synthetic probes.
+      enum:
+      - AWS
+      - AZURE
+      - GOOGLE_CLOUD
+      type: string
+    ProbePlatformOptions:
+      description: |
+        Configure cloud platforms of the synthetic availability test probes.
+        If omitted or set to null, no particular cloud platform will be enforced.
+      example:
+        testFromAll: true
+        probePlatforms:
+        - AWS
+        - AWS
+      properties:
+        probePlatforms:
+          items:
+            $ref: '#/components/schemas/ProbePlatform'
+          type: array
+        testFromAll:
+          type: boolean
+      required:
+      - probePlatforms
+      type: object
+    TestFrom:
+      description: |
+        Configure locations of the synthetic availability test probes.
+        Acceptable `values` depend on the selected `type` and actual values of existing probes.
+        To find out all possible `values` of each type, fetch the probes from the `/v1/probes` path.
+      example:
+        values:
+        - NA
+        - NA
+        type: REGION
+      properties:
+        type:
+          $ref: '#/components/schemas/ProbeLocationType'
+        values:
+          description: |
+            A list of probe location values of the selected `type`. At least one value matching an existing
+            probe must be provided.
+          items:
+            example: NA
+            type: string
+          type: array
+      required:
+      - type
+      - values
+      type: object
+    SslMonitoring:
+      description: |
+        Configure monitoring of SSL/TLS certificates validity. This option is relevant for HTTPS protocol only.
+
+        If omitted or set to null, SSL monitoring will be disabled and its previous configuration discarded.
+      example:
+        daysPriorToExpiration: 7
+        enabled: true
+        ignoreIntermediateCertificates: true
+      nullable: true
+      properties:
+        enabled:
+          description: |
+            Whether SSL monitoring is enabled for the website.
+
+            If set to false, SSL monitoring will be disabled, but the other settings will be remembered in
+            case you re-enable it later.
+
+            If omitted, the previous setting will stay in effect. If there is no previous setting, the value
+            will default to false.
+          nullable: true
+          type: boolean
+        daysPriorToExpiration:
+          description: |
+            Number of days before the expiration date an SSL certificate will be considered 'expiring.'
+          example: 7
+          maximum: 10000
+          minimum: 1
+          nullable: true
+          type: integer
+        ignoreIntermediateCertificates:
+          description: |
+            Use this option to limit the certificate expiration check to only the first certificate in the
+            chain (normally the host certificate). This way you will not be warned about impending expiration
+            of intermediate or root Certification Authority certificates in the chain.
+
+            This option does not affect any other certificate validity checks besides expiration.
+
+            If omitted, the previous setting will stay in effect. If there is no previous setting, the value
+            will default to false.
+          nullable: true
+          type: boolean
+      type: object
+    CustomHeaders:
+      description: |
+        Configure custom request headers to be sent with each availability test. It is possible to
+        provide multiple headers with the same name.
+
+        If omitted, set to null or set to an empty array, no custom headers will be sent.
+      items:
+        $ref: '#/components/schemas/CustomHeaders_inner'
+      nullable: true
+      type: array
+    TestIntervalInSeconds:
+      description: |
+        Configure how often availability tests should be performed.
+
+        Provide a number of seconds that is divisible by 60 and no greater than 14400 (4 hours).
+      maximum: 14400
+      minimum: 60
+      multipleOf: 60
+      type: integer
+    NextOnDemandAvailabilityTime:
+      properties:
+        nextOnDemandAvailabilityTime:
+          description: "Timestamp for when the next on-demand check could be executed.\
+            \ \nIf at \"0\", it means you can execute it anytime.\n"
+          example: 0
+          type: number
+      type: object
+    Error:
+      example:
+        code: BadInput
+        details:
+        - null
+        - null
+        innerError:
+          code: NoMonitoringConfigured
+          innererror: null
+          message: "You have to configure either Availability monitoring or Real User\
+            \ Monitoring (RUM) \nto be able to create a website\n"
+          target: WebsiteConfiguration
+        message: Failed to create a website
+        target: RequestBody
+      properties:
+        code:
+          description: One of a server-defined set of error codes.
+          example: BadInput
+          type: string
+        message:
+          description: A human-readable representation of the error.
+          example: Failed to create a website
+          type: string
+        target:
+          description: The target of the error.
+          example: RequestBody
+          type: string
+        details:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+        innerError:
+          $ref: '#/components/schemas/InnerError'
+      required:
+      - code
+      - message
+      type: object
+    InnerError:
+      description: An object containing more specific information than the current
+        object about the error.
+      example:
+        code: NoMonitoringConfigured
+        innererror: null
+        message: "You have to configure either Availability monitoring or Real User\
+          \ Monitoring (RUM) \nto be able to create a website\n"
+        target: WebsiteConfiguration
+      properties:
+        code:
+          description: A more specific error code than was provided by the containing
+            error.
+          example: NoMonitoringConfigured
+          type: string
+        message:
+          description: A human-readable representation of the error.
+          example: "You have to configure either Availability monitoring or Real User\
+            \ Monitoring (RUM) \nto be able to create a website\n"
+          type: string
+        target:
+          description: The target of the error.
+          example: WebsiteConfiguration
+          type: string
+        innererror:
+          $ref: '#/components/schemas/InnerError'
+      required:
+      - code
+      type: object
+    WebsiteSchema:
+      example:
+        name: solarwinds.com
+        rum:
+          snippet: snippet
+          spa: true
+          apdexTimeInSeconds: 4
+        url: https://www.solarwinds.com
+        availabilityCheckSettings:
+          checkForString:
+            value: value
+            operator: CONTAINS
+          testIntervalInSeconds: 1208
+          testFrom:
+            values:
+            - NA
+            - NA
+            type: REGION
+          platformOptions:
+            testFromAll: true
+            probePlatforms:
+            - AWS
+            - AWS
+          allowInsecureRenegotiation: true
+          protocols:
+          - HTTP
+          - HTTPS
+          ssl:
+            daysPriorToExpiration: 7
+            enabled: true
+            ignoreIntermediateCertificates: true
+          customHeaders:
+          - name: name
+            value: value
+          - name: name
+            value: value
+      properties:
+        name:
+          description: |
+            Name of the website, which must be unique within the organization. The website must also not
+            contain any control characters, any white space other than space (U+0020), or any consecutive,
+            leading or trailing spaces.
+          example: solarwinds.com
+          type: string
+        url:
+          description: |
+            URL of the website. Must be a valid URL with no leading or trailing white space. Must not contain
+            invalid port number (>65535).
+          example: https://www.solarwinds.com
+          type: string
+        availabilityCheckSettings:
+          $ref: '#/components/schemas/WebsiteSchema_availabilityCheckSettings'
+        rum:
+          $ref: '#/components/schemas/WebsiteSchema_rum'
+      required:
+      - name
+      - url
+      type: object
+    OnDemandCheckStatus:
+      enum:
+      - UNSPECIFIED
+      - OK
+      - TOO_EARLY
+      type: string
+    OnDemandCheckSchema:
+      allOf:
+      - $ref: '#/components/schemas/EntityIdSchema'
+      - properties:
+          nextOnDemandAvailabilityTime:
+            description: Time when it will be possible to schedule another on-demand
+              check
+            example: "1706184488"
+            pattern: ^\d+$
+            type: string
+          onDemandCheckStatus:
+            $ref: '#/components/schemas/OnDemandCheckStatus'
+        type: object
+    AnalysisDetailsBase:
+      properties:
+        durationInMs:
+          type: integer
+        errorMessage:
+          type: string
+      required:
+      - durationInMs
+      type: object
+    IpLookupDetails:
+      properties:
+        hostname:
+          type: string
+        resolvedIp:
+          type: string
+      required:
+      - hostname
+      - resolvedIp
+      type: object
+    HttpHeader:
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      type: object
+    HttpMessage:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - properties:
+          headers:
+            items:
+              $ref: '#/components/schemas/HttpHeader'
+            type: array
+          body:
+            type: string
+        required:
+        - headers
+        type: object
+    AnalysisSchema:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - description: Analysis related to availability test result.
+        properties:
+          analysisId:
+            example: e-1450145096950939648-HTTP-city:Frankfurt-1702470792-analysis
+            type: string
+          resolveIp:
+            $ref: '#/components/schemas/AnalysisSchema_allOf_resolveIp'
+          connection:
+            $ref: '#/components/schemas/AnalysisSchema_allOf_connection'
+          message:
+            $ref: '#/components/schemas/AnalysisSchema_allOf_message'
+          output:
+            $ref: '#/components/schemas/AnalysisSchema_allOf_output'
+          traceroute:
+            $ref: '#/components/schemas/AnalysisSchema_allOf_traceroute'
+          redirects:
+            items:
+              $ref: '#/components/schemas/AnalysisSchema_allOf_redirects'
+            type: array
+        required:
+        - analysisId
+        type: object
+    Validation:
+      properties:
+        type:
+          enum:
+          - CERTIFICATES
+          - CONTAINS_STRING
+          - NOT_CONTAINS_STRING
+          type: string
+        status:
+          enum:
+          - SUCCESS
+          - WARNING
+          - FAILURE
+          - SKIPPED
+          type: string
+      required:
+      - status
+      - type
+      type: object
+    SslCertificate:
+      properties:
+        name:
+          type: string
+        validTo:
+          type: string
+        certificate:
+          type: string
+      required:
+      - certificate
+      - name
+      - validTo
+      type: object
+    SslCertificates:
+      allOf:
+      - $ref: '#/components/schemas/Validation'
+      - properties:
+          minTimeValid:
+            type: integer
+          certificates:
+            $ref: '#/components/schemas/SslCertificates_allOf_certificates'
+        required:
+        - minTimeValid
+        type: object
+    CheckForString:
+      allOf:
+      - $ref: '#/components/schemas/Validation'
+      - properties:
+          string:
+            type: string
+        required:
+        - string
+        type: object
+    ValidationSchema:
+      properties:
+        sslCertificates:
+          $ref: '#/components/schemas/SslCertificates'
+        checkForString:
+          $ref: '#/components/schemas/CheckForString'
+      type: object
+    CheckForStringType:
+      description: |
+        Use this field to configure whether availability tests should check for presence or absence of a
+        particular string on a page.
+
+        If the `operator` is DOES_NOT_CONTAIN and the `value` is found on the page, the availability test
+        will fail.
+
+        Likewise, if the `operator` is CONTAINS and the `value` is not found on the page, the
+        availability test will fail.
+
+        If omitted or set to null, the string checking functionality will be disabled.
+      example:
+        value: value
+        operator: CONTAINS
+      nullable: true
+      properties:
+        operator:
+          description: |
+            Defines whether the check should pass only when the string is present on the page (CONTAINS) or
+            only when it is absent (DOES_NOT_CONTAIN).
+          enum:
+          - CONTAINS
+          - DOES_NOT_CONTAIN
+          type: string
+        value:
+          description: The string that which will be searched in the page source code.
+          type: string
+      required:
+      - operator
+      - value
+      type: object
+    _entities_websites__entityId__get_200_response:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - $ref: '#/components/schemas/WebsiteSchema'
+      - $ref: '#/components/schemas/NextOnDemandAvailabilityTime'
+      example:
+        nextOnDemandAvailabilityTime: 0
+        name: solarwinds.com
+        id: e-1448474379026206720
+        rum:
+          snippet: snippet
+          spa: true
+          apdexTimeInSeconds: 4
+        type: Website
+        url: https://www.solarwinds.com
+        availabilityCheckSettings:
+          checkForString:
+            value: value
+            operator: CONTAINS
+          testIntervalInSeconds: 1208
+          testFrom:
+            values:
+            - NA
+            - NA
+            type: REGION
+          platformOptions:
+            testFromAll: true
+            probePlatforms:
+            - AWS
+            - AWS
+          allowInsecureRenegotiation: true
+          protocols:
+          - HTTP
+          - HTTPS
+          ssl:
+            daysPriorToExpiration: 7
+            enabled: true
+            ignoreIntermediateCertificates: true
+          customHeaders:
+          - name: name
+            value: value
+          - name: name
+            value: value
+    CustomHeaders_inner:
+      example:
+        name: name
+        value: value
+      properties:
+        name:
+          description: |
+            Name of a request header. Must contain only characters allowed by RFC: a-z, A-Z, 0-9, - and _.
+          type: string
+        value:
+          description: Value of a request header.
+          type: string
+      required:
+      - name
+      - value
+      type: object
+    WebsiteSchema_availabilityCheckSettings:
+      description: |
+        Use this field to configure availability tests for the website.
+
+        You are required to configure at least availability monitoring or real user monitoring
+        to be able to create website.
+      example:
+        checkForString:
+          value: value
+          operator: CONTAINS
+        testIntervalInSeconds: 1208
+        testFrom:
+          values:
+          - NA
+          - NA
+          type: REGION
+        platformOptions:
+          testFromAll: true
+          probePlatforms:
+          - AWS
+          - AWS
+        allowInsecureRenegotiation: true
+        protocols:
+        - HTTP
+        - HTTPS
+        ssl:
+          daysPriorToExpiration: 7
+          enabled: true
+          ignoreIntermediateCertificates: true
+        customHeaders:
+        - name: name
+          value: value
+        - name: name
+          value: value
+      nullable: true
+      properties:
+        checkForString:
+          $ref: '#/components/schemas/CheckForStringType'
+        testIntervalInSeconds:
+          description: |
+            Configure how often availability tests should be performed.
+
+            Provide a number of seconds that is divisible by 60 and no greater than 14400 (4 hours).
+          maximum: 14400
+          minimum: 60
+          multipleOf: 60
+          type: integer
+        protocols:
+          description: "Configure which protocols need availability tests to be performed.\
+            \ \nAt least one protocol must be provided.\n"
+          example:
+          - HTTP
+          - HTTPS
+          items:
+            $ref: '#/components/schemas/WebsiteProtocol'
+          type: array
+        platformOptions:
+          $ref: '#/components/schemas/ProbePlatformOptions'
+        testFrom:
+          $ref: '#/components/schemas/TestFrom'
+        ssl:
+          $ref: '#/components/schemas/SslMonitoring'
+        customHeaders:
+          description: |
+            Configure custom request headers to be sent with each availability test. It is possible to
+            provide multiple headers with the same name.
+
+            If omitted, set to null or set to an empty array, no custom headers will be sent.
+          items:
+            $ref: '#/components/schemas/CustomHeaders_inner'
+          nullable: true
+          type: array
+        allowInsecureRenegotiation:
+          description: |
+            Allow insecure SSL renegotiation which introduces a security risk in the communication process.
+
+            Checking this option could lead to exposing to unauthorized entities and possibility of unauthorized access, interception, or manipulation of sensitive data, compromising the integrity and security of the communication channel.
+
+            Available only with HTTPS check.
+
+            If omitted or set to null, insecure SSL renegotiation won't be allowed.
+          type: boolean
+      required:
+      - protocols
+      - testFrom
+      - testIntervalInSeconds
+      type: object
+    WebsiteSchema_rum:
+      description: |
+        Use this field to configure real user monitoring (RUM) for the website.
+
+        You are required to configure at least availability monitoring or real user monitoring
+        to be able to create website.
+      example:
+        snippet: snippet
+        spa: true
+        apdexTimeInSeconds: 4
+      nullable: true
+      properties:
+        apdexTimeInSeconds:
+          example: 4
+          minimum: 1
+          type: integer
+        snippet:
+          readOnly: true
+          type: string
+        spa:
+          type: boolean
+      required:
+      - spa
+      type: object
+    AnalysisSchema_allOf_resolveIp:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - properties:
+          hostname:
+            type: string
+          resolvedIp:
+            type: string
+        required:
+        - resolvedIp
+        type: object
+    AnalysisSchema_allOf_connection:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - properties:
+          ipAddress:
+            type: string
+          port:
+            type: integer
+          protocol:
+            type: string
+        type: object
+    AnalysisSchema_allOf_message:
+      properties:
+        durationInMs:
+          type: integer
+        errorMessage:
+          type: string
+      required:
+      - durationInMs
+      type: object
+    AnalysisSchema_allOf_output:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - properties:
+          rawOutput:
+            type: string
+        required:
+        - rawOutput
+        type: object
+    AnalysisSchema_allOf_traceroute:
+      properties:
+        durationInMs:
+          type: integer
+        rawOutput:
+          type: string
+      required:
+      - durationInMs
+      - rawOutput
+      type: object
+    AnalysisSchema_allOf_ipLookupDetails:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - properties:
+          hostname:
+            type: string
+          resolvedIp:
+            type: string
+        required:
+        - hostname
+        - resolvedIp
+        type: object
+    AnalysisSchema_allOf_connectionDetails:
+      allOf:
+      - $ref: '#/components/schemas/AnalysisDetailsBase'
+      - properties:
+          ipAddress:
+            type: string
+          port:
+            type: integer
+          protocol:
+            type: string
+        required:
+        - ipAddress
+        - port
+        - protocol
+        type: object
+    AnalysisSchema_allOf_redirects:
+      properties:
+        url:
+          type: string
+        durationInMs:
+          type: integer
+        ipLookupDetails:
+          $ref: '#/components/schemas/AnalysisSchema_allOf_ipLookupDetails'
+        connectionDetails:
+          $ref: '#/components/schemas/AnalysisSchema_allOf_connectionDetails'
+        requestDetails:
+          $ref: '#/components/schemas/HttpMessage'
+        responseDetails:
+          $ref: '#/components/schemas/HttpMessage'
+      required:
+      - durationInMs
+      - url
+      type: object
+    SslCertificates_allOf_certificates:
+      properties:
+        expired:
+          items:
+            $ref: '#/components/schemas/SslCertificate'
+          type: array
+        expiring:
+          items:
+            $ref: '#/components/schemas/SslCertificate'
+          type: array
+        invalid:
+          items:
+            $ref: '#/components/schemas/SslCertificate'
+          type: array
+        valid:
+          items:
+            $ref: '#/components/schemas/SslCertificate'
+          type: array
+      required:
+      - expired
+      - expiring
+      - invalid
+      - valid
+      type: object
+  securitySchemes:
+    Full Access API Token:
+      scheme: bearer
+      type: http
