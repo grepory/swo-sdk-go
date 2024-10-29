@@ -167,9 +167,9 @@ func New(opts ...SDKOption) *Swo {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.0.0",
-			SDKVersion:        "0.1.1",
+			SDKVersion:        "0.1.2",
 			GenVersion:        "2.442.11",
-			UserAgent:         "speakeasy-sdk/go 0.1.1 2.442.11 1.0.0 github.com/grepory/swo-sdk-go/swo",
+			UserAgent:         "speakeasy-sdk/go 0.1.2 2.442.11 1.0.0 github.com/grepory/swo-sdk-go/swo",
 			ServerDefaults: []map[string]string{
 				{
 					"region": "na-01",
