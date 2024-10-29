@@ -5,8 +5,11 @@ management:
   docVersion: 1.0.0
   speakeasyVersion: 1.423.1
   generationVersion: 2.442.11
-  releaseVersion: 0.1.1
-  configChecksum: 5698de8c1dbd03f4f8ba2f46d53f63cb
+  releaseVersion: 0.1.2
+  configChecksum: f372bd3dd7f95111687c2ae246577084
+  repoURL: https://github.com/grepory/swo-sdk-go.git
+  repoSubDirectory: swo
+  installationURL: https://github.com/grepory/swo-sdk-go/swo
 features:
   go:
     additionalDependencies: 0.1.0

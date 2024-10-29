@@ -2,16 +2,17 @@ speakeasyVersion: 1.423.1
 sources:
     SWO-OAS:
         sourceNamespace: swo-oas
-        sourceRevisionDigest: sha256:303eddfcbaeb5761ced74e2df6119aa50afa30ca27d7ca5b50dbc24b3dcdc81e
-        sourceBlobDigest: sha256:1c0d58ec36bc0e2b4b7a720ef9a5aecc5e8d5819853c57359aab3c89dab814c0
+        sourceRevisionDigest: sha256:d759d946f77060fe5192f94f737d5a9bfc1862f0219412b8f0818731c0977ae2
+        sourceBlobDigest: sha256:fcd9ce6d3dbc1b537e75d6d1d62a732d9aced698e5557f3a0d0acc36995b8137
         tags:
             - latest
+            - main
 targets:
     swo:
         source: SWO-OAS
         sourceNamespace: swo-oas
-        sourceRevisionDigest: sha256:303eddfcbaeb5761ced74e2df6119aa50afa30ca27d7ca5b50dbc24b3dcdc81e
-        sourceBlobDigest: sha256:1c0d58ec36bc0e2b4b7a720ef9a5aecc5e8d5819853c57359aab3c89dab814c0
+        sourceRevisionDigest: sha256:d759d946f77060fe5192f94f737d5a9bfc1862f0219412b8f0818731c0977ae2
+        sourceBlobDigest: sha256:fcd9ce6d3dbc1b537e75d6d1d62a732d9aced698e5557f3a0d0acc36995b8137
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
