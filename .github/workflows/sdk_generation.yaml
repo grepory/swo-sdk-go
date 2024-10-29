@@ -18,9 +18,6 @@ permissions:
     - cron: 0 0 * * *
 jobs:
   generate:
-    defaults:
-      run:
-        working-directory: swo/
     uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
     with:
       force: ${{ github.event.inputs.force }}
