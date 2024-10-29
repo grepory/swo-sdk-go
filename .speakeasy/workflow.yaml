@@ -3,13 +3,14 @@ speakeasyVersion: latest
 sources:
     SWO-OAS:
         inputs:
-            - location: ../openapi.1.0.0.json
+            - location: openapi.1.0.0.json
         registry:
             location: registry.speakeasyapi.dev/swo/swo/swo-oas
 targets:
     swo:
         target: go
         source: SWO-OAS
+        output: swo
         codeSamples:
             registry:
                 location: registry.speakeasyapi.dev/swo/swo/swo-oas-code-samples
