@@ -2,14 +2,15 @@
 
 ## Prerequisites
 
-* Docker
-* [Task](https://taskfile.dev/)
-* openapitools/openapi-generator-cli:v7.7.0 container image
+* SpeakEasy CLI
+  * `brew install speakeasy-api/tap/speakeasy`
 
-## How to generate the SDKs
+## Generating the SDK
 
-To generate the swov1 package:
+The `Generate SDK` GitHub Action will run on merges to main or when run manually. There is no need to
+manually generate the SDK, but if you should a situation arise where it's necessary, you can do so by running
+the following:
 
 ```bash
-VERSION=swov1 task generate
+$ cd swo && speakeasy run
 ```

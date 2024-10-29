@@ -1,0 +1,247 @@
+lockVersion: 2.0.0
+id: 2ebd4526-f207-4995-b9cf-a47fa0992eb1
+management:
+  docChecksum: 9617f6bd55ee77dcdff38696c2a3d1b1
+  docVersion: 1.0.0
+  speakeasyVersion: 1.423.1
+  generationVersion: 2.442.11
+  releaseVersion: 0.1.0
+  configChecksum: cb57cb190f2637c668e95eec43a6ac38
+features:
+  go:
+    additionalDependencies: 0.1.0
+    core: 3.5.14
+    defaultEnabledRetries: 0.2.0
+    devContainers: 2.90.0
+    envVarSecurityUsage: 0.3.1
+    globalSecurity: 2.82.10
+    globalSecurityCallbacks: 0.1.0
+    globalSecurityFlattening: 0.1.0
+    globalServerURLs: 2.82.2
+    intellisenseMarkdownSupport: 0.1.0
+    pagination: 2.82.1
+    responseFormat: 0.1.2
+    retries: 2.83.0
+    sdkHooks: 0.1.0
+    tests: 0.6.0
+generatedFiles:
+  - .devcontainer/README.md
+  - .devcontainer/devcontainer.json
+  - .devcontainer/setup.sh
+  - .gitattributes
+  - /models/components/changeevent.go
+  - /models/components/changeeventtags.go
+  - /models/components/commonkeyvaluepair.go
+  - /models/components/commonlink.go
+  - /models/components/commonmetricinfo.go
+  - /models/components/commonpageinfo.go
+  - /models/components/createtokenrequest.go
+  - /models/components/entity.go
+  - /models/components/httpmetadata.go
+  - /models/components/logsarchive.go
+  - /models/components/logsevent.go
+  - /models/components/metricsaggregationmethods.go
+  - /models/components/metricsgrouping.go
+  - /models/components/metricsmeasurement.go
+  - /models/components/security.go
+  - /models/operations/createchangeevent.go
+  - /models/operations/createtoken.go
+  - /models/operations/getentitybyid.go
+  - /models/operations/getmetricbyname.go
+  - /models/operations/listentities.go
+  - /models/operations/listentitytypes.go
+  - /models/operations/listlogarchives.go
+  - /models/operations/listmetricattributes.go
+  - /models/operations/listmetricattributevalues.go
+  - /models/operations/listmetricmeasurements.go
+  - /models/operations/listmetrics.go
+  - /models/operations/listmetricsforentitytype.go
+  - /models/operations/searchlogs.go
+  - CONTRIBUTING.md
+  - USAGE.md
+  - changeevents.go
+  - docs/models/components/changeevent.md
+  - docs/models/components/changeeventtags.md
+  - docs/models/components/commonkeyvaluepair.md
+  - docs/models/components/commonlink.md
+  - docs/models/components/commonmetricinfo.md
+  - docs/models/components/commonpageinfo.md
+  - docs/models/components/createtokenrequest.md
+  - docs/models/components/entity.md
+  - docs/models/components/httpmetadata.md
+  - docs/models/components/logsarchive.md
+  - docs/models/components/logsevent.md
+  - docs/models/components/metricsaggregationmethods.md
+  - docs/models/components/metricsgrouping.md
+  - docs/models/components/metricsmeasurement.md
+  - docs/models/components/security.md
+  - docs/models/components/tags.md
+  - docs/models/components/type.md
+  - docs/models/operations/createchangeeventresponse.md
+  - docs/models/operations/createchangeeventresponsebody.md
+  - docs/models/operations/createtokenresponse.md
+  - docs/models/operations/createtokenresponsebody.md
+  - docs/models/operations/getentitybyidrequest.md
+  - docs/models/operations/getentitybyidresponse.md
+  - docs/models/operations/getmetricbynamerequest.md
+  - docs/models/operations/getmetricbynameresponse.md
+  - docs/models/operations/listentitiesrequest.md
+  - docs/models/operations/listentitiesresponse.md
+  - docs/models/operations/listentitiesresponsebody.md
+  - docs/models/operations/listentitytypesresponse.md
+  - docs/models/operations/listentitytypesresponsebody.md
+  - docs/models/operations/listlogarchivesrequest.md
+  - docs/models/operations/listlogarchivesresponse.md
+  - docs/models/operations/listlogarchivesresponsebody.md
+  - docs/models/operations/listmetricattributesrequest.md
+  - docs/models/operations/listmetricattributesresponse.md
+  - docs/models/operations/listmetricattributesresponsebody.md
+  - docs/models/operations/listmetricattributevaluesrequest.md
+  - docs/models/operations/listmetricattributevaluesresponse.md
+  - docs/models/operations/listmetricattributevaluesresponsebody.md
+  - docs/models/operations/listmetricmeasurementsrequest.md
+  - docs/models/operations/listmetricmeasurementsresponse.md
+  - docs/models/operations/listmetricmeasurementsresponsebody.md
+  - docs/models/operations/listmetricsforentitytyperequest.md
+  - docs/models/operations/listmetricsforentitytyperesponse.md
+  - docs/models/operations/listmetricsforentitytyperesponsebody.md
+  - docs/models/operations/listmetricsrequest.md
+  - docs/models/operations/listmetricsresponse.md
+  - docs/models/operations/listmetricsresponsebody.md
+  - docs/models/operations/option.md
+  - docs/models/operations/searchlogsrequest.md
+  - docs/models/operations/searchlogsresponse.md
+  - docs/models/operations/searchlogsresponsebody.md
+  - docs/sdks/changeevents/README.md
+  - docs/sdks/entities/README.md
+  - docs/sdks/logs/README.md
+  - docs/sdks/metadata/README.md
+  - docs/sdks/metrics/README.md
+  - docs/sdks/swo/README.md
+  - docs/sdks/tokens/README.md
+  - entities.go
+  - go.mod
+  - internal/hooks/hooks.go
+  - internal/utils/contenttype.go
+  - internal/utils/form.go
+  - internal/utils/headers.go
+  - internal/utils/json.go
+  - internal/utils/pathparams.go
+  - internal/utils/queryparams.go
+  - internal/utils/requestbody.go
+  - internal/utils/retries.go
+  - internal/utils/security.go
+  - internal/utils/utils.go
+  - logs.go
+  - metadata.go
+  - metrics.go
+  - models/operations/options.go
+  - models/sdkerrors/sdkerror.go
+  - retry/config.go
+  - swo.go
+  - tokens.go
+  - types/bigint.go
+  - types/date.go
+  - types/datetime.go
+  - types/decimal.go
+  - types/pointers.go
+examples:
+  createChangeEvent:
+    speakeasy-default-create-change-event:
+      requestBody:
+        application/json: {"name": "<value>", "title": "<value>"}
+      responses:
+        "200":
+          application/json: {"id": 119883}
+  listEntities:
+    speakeasy-default-list-entities:
+      parameters:
+        query:
+          type: "<value>"
+      responses:
+        "200":
+          application/json: {"entities": [{"id": "<id>", "type": "<value>"}], "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  getEntityById:
+    speakeasy-default-get-entity-by-id:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "type": "<value>"}
+  searchLogs:
+    speakeasy-default-search-logs:
+      responses:
+        "200":
+          application/json: {"logs": [{"id": "<id>", "time": "<value>", "message": "<value>", "hostname": "blue-formation.org", "severity": "<value>", "program": "<value>"}], "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  listLogArchives:
+    speakeasy-default-list-log-archives:
+      parameters:
+        query:
+          startTime: "<value>"
+          endTime: "<value>"
+      responses:
+        "200":
+          application/json: {"logArchives": [{"id": "<id>", "name": "<value>", "downloadUrl": "https://athletic-reward.net", "archivedTimestamp": "<value>", "severity": 110794}, {"id": "<id>", "name": "<value>", "downloadUrl": "https://radiant-obedience.biz", "archivedTimestamp": "<value>", "severity": 149813}, {"id": "<id>", "name": "<value>", "downloadUrl": "https://menacing-cross-contamination.org", "archivedTimestamp": "<value>", "severity": 542263}], "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  listEntityTypes:
+    speakeasy-default-list-entity-types:
+      responses:
+        "200":
+          application/json: {"types": ["<value>", "<value>"]}
+  listMetricsForEntityType:
+    speakeasy-default-list-metrics-for-entity-type:
+      parameters:
+        path:
+          type: "<value>"
+        query: {}
+      responses:
+        "200":
+          application/json: {"type": "<value>", "metrics": [{"name": "<value>", "units": "<value>", "formula": "<value>", "lastReportedTime": "<value>"}, {"name": "<value>", "units": "<value>", "formula": "<value>", "lastReportedTime": "<value>"}]}
+  listMetrics:
+    speakeasy-default-list-metrics:
+      responses:
+        "200":
+          application/json: {"metricsInfo": [], "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  getMetricByName:
+    speakeasy-default-get-metric-by-name:
+      parameters:
+        path:
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"name": "<value>", "units": "<value>", "formula": "<value>", "lastReportedTime": "<value>"}
+  listMetricAttributes:
+    speakeasy-default-list-metric-attributes:
+      parameters:
+        path:
+          name: "<value>"
+        query: {}
+      responses:
+        "200":
+          application/json: {"names": [], "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  listMetricAttributeValues:
+    speakeasy-default-list-metric-attribute-values:
+      parameters:
+        path:
+          name: "<value>"
+          attributeName: "<value>"
+        query: {}
+      responses:
+        "200":
+          application/json: {"name": "<value>", "values": [], "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  listMetricMeasurements:
+    speakeasy-default-list-metric-measurements:
+      parameters:
+        path:
+          name: "<value>"
+        query: {}
+      responses:
+        "200":
+          application/json: {"groupings": [{"attributes": [{"key": "<key>", "value": "<value>"}, {"key": "<key>", "value": "<value>"}], "measurements": []}, {"attributes": [{"key": "<key>", "value": "<value>"}, {"key": "<key>", "value": "<value>"}, {"key": "<key>", "value": "<value>"}], "measurements": [{"time": "<value>", "value": 730756}, {"time": "<value>", "value": 115821}, {"time": "<value>", "value": 25026}]}, {"attributes": [], "measurements": [{"time": "<value>", "value": 201967}]}], "bucketSizeInSeconds": 45557, "pageInfo": {"prevPage": "<value>", "nextPage": "<value>"}}
+  createToken:
+    speakeasy-default-create-token:
+      requestBody:
+        application/json: {"name": "<value>", "tags": {"server": "<value>", "tag_without_value": "<value>"}, "type": "ingestion"}
+      responses:
+        "200":
+          application/json: {"token": "<value>"}

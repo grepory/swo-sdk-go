@@ -1,0 +1,33 @@
+speakeasyVersion: 1.423.1
+sources:
+    SWO-OAS:
+        sourceNamespace: swo-oas
+        sourceRevisionDigest: sha256:71277db128a1ee441aaf5066c0377d9c18ee9b449b779d348749ac8d517bc14c
+        sourceBlobDigest: sha256:1c0d58ec36bc0e2b4b7a720ef9a5aecc5e8d5819853c57359aab3c89dab814c0
+        tags:
+            - latest
+targets:
+    swo:
+        source: SWO-OAS
+        sourceNamespace: swo-oas
+        sourceRevisionDigest: sha256:71277db128a1ee441aaf5066c0377d9c18ee9b449b779d348749ac8d517bc14c
+        sourceBlobDigest: sha256:1c0d58ec36bc0e2b4b7a720ef9a5aecc5e8d5819853c57359aab3c89dab814c0
+        codeSamplesNamespace: swo-oas-code-samples
+        codeSamplesRevisionDigest: sha256:6aeedd6f45c8b82282e0cfdb601774aef12890a9f8c0da7aef31e3b6e102af69
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        SWO-OAS:
+            inputs:
+                - location: ../openapi.1.0.0.json
+            registry:
+                location: registry.speakeasyapi.dev/swo/swo/swo-oas
+    targets:
+        swo:
+            target: go
+            source: SWO-OAS
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/swo/swo/swo-oas-code-samples
+                blocking: false

@@ -1,7 +1,0 @@
-validateSpec: false
-packageName: swov1
-gitUserId: solarwinds
-gitRepoId: swo-sdk-go
-additionalProperties:
-  isGoSubmodule: true
-  goImportAlias: swoclient

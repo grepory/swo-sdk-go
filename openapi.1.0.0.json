@@ -1,0 +1,1281 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SolarWinds Observability",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "changeEvents"
+    },
+    {
+      "name": "entities"
+    },
+    {
+      "name": "logs"
+    },
+    {
+      "name": "metrics"
+    },
+    {
+      "name": "metadata"
+    },
+    {
+      "name": "tokens"
+    }
+  ],
+  "paths": {
+    "/v1/changeevents": {
+      "post": {
+        "operationId": "createChangeEvent",
+        "summary": "Create an event",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "A JSON object containing the id of the created event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "readOnly": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "changeEvents"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeEvent"
+              }
+            }
+          },
+          "description": "A JSON object containing a change event"
+        }
+      }
+    },
+    "/v1/entities": {
+      "get": {
+        "operationId": "listEntities",
+        "summary": "Get a list of entities",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "The entities type",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "The entities name",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON object containing an array of entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Entity"
+                      }
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "entities",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "entities"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/entities/{id}": {
+      "get": {
+        "operationId": "getEntityById",
+        "summary": "Get an entity by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The entities ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON object containing a single entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Entity"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "entities"
+        ]
+      }
+    },
+    "/v1/logs": {
+      "get": {
+        "operationId": "searchLogs",
+        "summary": "Search logs",
+        "description": "Search logs within a time period",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "A search query string",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "description": "Filter logs by a specific group name",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "entityId",
+            "in": "query",
+            "required": false,
+            "description": "Filter logs by a specific entity id",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.endTime"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "description": "Search direction: backward, forward, or tail",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "logs": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogsEvent"
+                      }
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "logs",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "logs"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/logs/archives": {
+      "get": {
+        "operationId": "listLogArchives",
+        "summary": "Retrieve a list of log archives",
+        "description": "Retrieve a list of log archives between a start and end time",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LogsTimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/LogsTimeRangeParams.endTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "logArchives": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogsArchive"
+                      }
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "logArchives",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "logs"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/metadata/entities/types": {
+      "get": {
+        "operationId": "listEntityTypes",
+        "summary": "List all entity types",
+        "description": "List all available entity types.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "types"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metadata"
+        ]
+      }
+    },
+    "/v1/metadata/entities/types/{type}/metrics": {
+      "get": {
+        "operationId": "listMetricsForEntityType",
+        "summary": "List metrics metadata for an entity type",
+        "description": "List metrics metadata for an entity type between a start and end time. If start time and end time unspecified, default will be applied.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.endTime"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "metrics": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Common.MetricInfo"
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "metrics"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metadata"
+        ]
+      }
+    },
+    "/v1/metrics": {
+      "get": {
+        "operationId": "listMetrics",
+        "summary": "List metrics",
+        "description": "List metrics seen within a time period",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "metric name",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.endTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "metricsInfo": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Common.MetricInfo"
+                      }
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "metricsInfo",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metrics"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/metrics/{name}": {
+      "get": {
+        "operationId": "getMetricByName",
+        "summary": "Get metric info",
+        "description": "Get info about a metric",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "metric name",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common.MetricInfo"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metrics"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/metrics/{name}/attributes": {
+      "get": {
+        "operationId": "listMetricAttributes",
+        "summary": "List metric attribute names",
+        "description": "List all attribute names defined for the given metric",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "metric name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.endTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "names": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "names",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metrics"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/metrics/{name}/attributes/{attributeName}": {
+      "get": {
+        "operationId": "listMetricAttributeValues",
+        "summary": "List metric attribute values",
+        "description": "List values of a metric's attribute",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "metric name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attributeName",
+            "in": "path",
+            "required": true,
+            "description": "attribute name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.endTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "values",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metrics"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/metrics/{name}/measurements": {
+      "get": {
+        "operationId": "listMetricMeasurements",
+        "summary": "List metric measurement values, grouped by attributes, filtered by the filter",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "metric name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Query to filter the measurement values. e.g id: [id1,id2] category: moderate",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "groupBy",
+            "in": "query",
+            "required": false,
+            "description": "Comma-delimited list of attribute names to group measurements by. e.g id, category",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "aggregateBy",
+            "in": "query",
+            "required": false,
+            "description": "Aggregation method used to group measurements",
+            "schema": {
+              "$ref": "#/components/schemas/MetricsAggregationMethods",
+              "default": "AVG"
+            },
+            "explode": false
+          },
+          {
+            "name": "bucketSizeInSeconds",
+            "in": "query",
+            "required": false,
+            "description": "Resolution size of an aggregation bucket in seconds",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "explode": false
+          },
+          {
+            "name": "preGroupBy",
+            "in": "query",
+            "required": false,
+            "description": "Secondary grouping to allow aggregating data points inside individual buckets. Has to be set together with `preGroupByMethod`",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "preGroupByMethod",
+            "in": "query",
+            "required": false,
+            "description": "Secondary aggregation to allow aggregating data points inside individual buckets. Has to be set together with `preGroupBy`",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.startTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.TimeRangeParams.endTime"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/Common.PageParams.skipToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "groupings": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MetricsGrouping"
+                      }
+                    },
+                    "bucketSizeInSeconds": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "pageInfo": {
+                      "$ref": "#/components/schemas/Common.PageInfo"
+                    }
+                  },
+                  "required": [
+                    "groupings",
+                    "bucketSizeInSeconds",
+                    "pageInfo"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "metrics"
+        ],
+        "x-speakeasy-pagination": {
+          "type": "url",
+          "outputs": {
+            "nextUrl": "$.pageInfo.nextPage"
+          }
+        }
+      }
+    },
+    "/v1/tokens": {
+      "post": {
+        "operationId": "createToken",
+        "summary": "Create ingestion token",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "token"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access is unauthorized."
+          },
+          "403": {
+            "description": "Access is forbidden."
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "Service unavailable."
+          }
+        },
+        "tags": [
+          "tokens"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTokenRequest"
+              }
+            }
+          },
+          "description": "Requested token's properties"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "components": {
+    "parameters": {
+      "Common.PageParams.pageSize": {
+        "name": "pageSize",
+        "in": "query",
+        "required": false,
+        "description": "Number of items in a response page",
+        "schema": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "explode": false
+      },
+      "Common.PageParams.skipToken": {
+        "name": "skipToken",
+        "in": "query",
+        "required": false,
+        "description": "Token for the requested page",
+        "schema": {
+          "type": "string"
+        },
+        "explode": false
+      },
+      "Common.TimeRangeParams.endTime": {
+        "name": "endTime",
+        "in": "query",
+        "required": false,
+        "description": "Timestamp in ISO 8601 format in UTC timezone: yyyy-MM-ddTHH:mm:ssZ",
+        "schema": {
+          "type": "string"
+        },
+        "explode": false
+      },
+      "Common.TimeRangeParams.startTime": {
+        "name": "startTime",
+        "in": "query",
+        "required": false,
+        "description": "Timestamp in ISO 8601 format in UTC timezone: yyyy-MM-ddTHH:mm:ssZ",
+        "schema": {
+          "type": "string"
+        },
+        "explode": false
+      },
+      "LogsTimeRangeParams.endTime": {
+        "name": "endTime",
+        "in": "query",
+        "required": true,
+        "description": "Timestamp in ISO 8601 format in UTC timezone: yyyy-MM-ddTHH:mm:ssZ",
+        "schema": {
+          "type": "string"
+        },
+        "explode": false
+      },
+      "LogsTimeRangeParams.startTime": {
+        "name": "startTime",
+        "in": "query",
+        "required": true,
+        "description": "Timestamp in ISO 8601 format in UTC timezone: yyyy-MM-ddTHH:mm:ssZ",
+        "schema": {
+          "type": "string"
+        },
+        "explode": false
+      }
+    },
+    "schemas": {
+      "ChangeEvent": {
+        "type": "object",
+        "required": [
+          "name",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "source": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parentEventId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tags": {
+            "$ref": "#/components/schemas/ChangeEventTags"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.Link"
+            }
+          }
+        }
+      },
+      "ChangeEventOtelResourceAttr": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "string"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "enum": [
+              "string"
+            ]
+          }
+        }
+      },
+      "ChangeEventTags": {
+        "type": "object",
+        "required": [
+          "additionalProp1",
+          "additionalProp2",
+          "additionalProp3"
+        ],
+        "properties": {
+          "additionalProp1": {
+            "type": "string"
+          },
+          "additionalProp2": {
+            "type": "string"
+          },
+          "additionalProp3": {
+            "type": "string"
+          }
+        }
+      },
+      "Common.KeyValuePair": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Common.Link": {
+        "type": "object",
+        "required": [
+          "rel",
+          "href"
+        ],
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "Common.MetricInfo": {
+        "type": "object",
+        "required": [
+          "name",
+          "units",
+          "formula",
+          "lastReportedTime"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "units": {
+            "type": "string"
+          },
+          "formula": {
+            "type": "string"
+          },
+          "lastReportedTime": {
+            "type": "string"
+          }
+        }
+      },
+      "Common.PageInfo": {
+        "type": "object",
+        "required": [
+          "prevPage",
+          "nextPage"
+        ],
+        "properties": {
+          "prevPage": {
+            "type": "string"
+          },
+          "nextPage": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateTokenRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "tags",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "object",
+            "properties": {
+              "server": {
+                "type": "string"
+              },
+              "tag_without_value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "server",
+              "tag_without_value"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ingestion"
+            ]
+          }
+        }
+      },
+      "Entity": {
+        "type": "object",
+        "required": [
+          "id",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "LogsArchive": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "downloadUrl",
+          "archivedTimestamp",
+          "severity"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string"
+          },
+          "archivedTimestamp": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "LogsEvent": {
+        "type": "object",
+        "required": [
+          "id",
+          "time",
+          "message",
+          "hostname",
+          "severity",
+          "program"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "hostname": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "program": {
+            "type": "string"
+          }
+        }
+      },
+      "MetricsAggregationMethods": {
+        "type": "string",
+        "enum": [
+          "COUNT",
+          "MIN",
+          "MAX",
+          "AVG",
+          "SUM",
+          "LAST"
+        ]
+      },
+      "MetricsGrouping": {
+        "type": "object",
+        "required": [
+          "attributes",
+          "measurements"
+        ],
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Common.KeyValuePair"
+            }
+          },
+          "measurements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetricsMeasurement"
+            }
+          }
+        }
+      },
+      "MetricsMeasurement": {
+        "type": "object",
+        "required": [
+          "time",
+          "value"
+        ],
+        "properties": {
+          "time": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "MetricsQueryParams": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "description": "Timestamp in ISO 8601 format in UTC timezone: yyyy-MM-ddTHH:mm:ssZ"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "Timestamp in ISO 8601 format in UTC timezone: yyyy-MM-ddTHH:mm:ssZ"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of items in a response page"
+          },
+          "skipToken": {
+            "type": "string",
+            "description": "Token for the requested page"
+          }
+        }
+      },
+      "Versions": {
+        "type": "string",
+        "enum": [
+          "1.0.0"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.{region}.cloud.solarwinds.com/",
+      "description": "Regional endpoint",
+      "variables": {
+        "region": {
+          "default": "na-01",
+          "description": "Region name"
+        }
+      }
+    }
+  ]
+}
